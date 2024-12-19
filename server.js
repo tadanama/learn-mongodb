@@ -45,9 +45,7 @@ app.post("/api/notes", async (req, res) => {
 	try {
 		await newNote.save();
 		console.log("note inside trc:", newNote); // returns the new note data with _id + createdAt and updatedAt timestamps
-		res
-			.status(201)
-			.json({ success: true, message: "Successfully create new note" });
+		res.status(201).json({ success: true, data: newNote });
 	} catch (error) {
 		console.log(error.message);
 		res.status(500).json({ success: false, message: "Internal server error" });
