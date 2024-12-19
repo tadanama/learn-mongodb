@@ -13,6 +13,17 @@ const port = process.env.PORT;
 // Parse json data to req.body
 app.use(express.json());
 
+// Route to get all notes
+app.get("/api/notes", async (req, res) => {
+	try {
+		const allNotes = await Note.find({}); // Returns an array of documents
+		res.status(200).json({ success: true, data: allNotes });
+	} catch (error) {
+		console.log("Error when fething notes:", error.message);
+		res.status(500).json({ success: true, message: "Internal server error" });
+	}
+});
+
 // Route to create notes
 app.post("/api/notes", async (req, res) => {
 	// Get the new note data
@@ -27,12 +38,12 @@ app.post("/api/notes", async (req, res) => {
 
 	// Create a new note document
 	const newNote = new Note(note);
-	console.log("note outside trc:", newNote);  // returns the new note data with its _id
+	console.log("note outside trc:", newNote); // returns the new note data with its _id
 
 	// Save the new note to the database
 	try {
 		await newNote.save();
-		console.log("note inside trc:", newNote);   // returns the new note data with _id + createdAt and updatedAt timestamps
+		console.log("note inside trc:", newNote); // returns the new note data with _id + createdAt and updatedAt timestamps
 		res
 			.status(201)
 			.json({ success: true, message: "Successfully create new note" });
