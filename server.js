@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 import Note from "./model/notes.model.js";
+import mongoose from "mongoose";
 
 // Enable environment variables
 dotenv.config();
@@ -50,6 +51,40 @@ app.post("/api/notes", async (req, res) => {
 	} catch (error) {
 		console.log(error.message);
 		res.status(500).json({ success: false, message: "Internal server error" });
+	}
+});
+
+app.patch("/api/notes/:id", async (req, res) => {
+	// Get the id of the note we trying to update
+	const { id } = req.params;
+
+	// Data to updte the note
+	const note = req.body;
+
+	console.log(Object.keys(note));
+	console.log(note.constructor);
+
+	// Return error if the req.body returns an empty object
+	//// if (!note && Object.keys(note.length === 0 && note.constructor === Object))
+	if (Object.keys(note.length === 0 && note.constructor === Object))
+		return res.status(400).json({
+			success: false,
+			message: "Must provide data to update the note",
+		});
+
+	// Check if id is valid
+	if (!mongoose.Types.ObjectId.isValid(id))
+		return res
+			.status(404)
+			.json({ success: false, message: "Note do not exist" });
+
+	// Update the note by id
+	try {
+		const updatedNote = await Note.findByIdAndUpdate(id, note, { new: true });
+		res.status(200).json({ success: true, data: updatedNote });
+	} catch (error) {
+		console.log("Error when updating note");
+		res.status(500).json({ success: true, message: "Internal server error" });
 	}
 });
 
