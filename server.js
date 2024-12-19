@@ -66,7 +66,7 @@ app.patch("/api/notes/:id", async (req, res) => {
 
 	// Return error if the req.body returns an empty object
 	//// if (!note && Object.keys(note.length === 0 && note.constructor === Object))
-	if (Object.keys(note.length === 0 && note.constructor === Object))
+	if (Object.keys(note).length === 0 && note.constructor === Object)
 		return res.status(400).json({
 			success: false,
 			message: "Must provide data to update the note",
