@@ -88,6 +88,30 @@ app.patch("/api/notes/:id", async (req, res) => {
 	}
 });
 
+// Route to delete a note
+app.delete("/api/notes/:id", async (req, res) => {
+	// Get the note id
+	const { id } = req.params;
+
+	// Check if the id is valid in database
+	if (!mongoose.Types.ObjectId.isValid(id))
+		return res
+			.status(404)
+			.json({ success: false, message: "Note with given id do not exist" });
+
+	// Delete note from database
+	try {
+		const result = await Note.findByIdAndDelete(id); // returns the deleted note document
+		console.log("Result from query:", result);
+		res
+			.status(200)
+			.json({ success: true, message: "Deleted note successfully" });
+	} catch (error) {
+		console.log("Error deleting note:", error.message);
+		res.status(500).json({ success: false, message: "Internal server error" });
+	}
+});
+
 app.listen(port, () => {
 	connectDB();
 	console.log(`Server running on port ${port}`);
