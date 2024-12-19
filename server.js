@@ -84,7 +84,7 @@ app.patch("/api/notes/:id", async (req, res) => {
 		res.status(200).json({ success: true, data: updatedNote });
 	} catch (error) {
 		console.log("Error when updating note");
-		res.status(500).json({ success: true, message: "Internal server error" });
+		res.status(500).json({ success: false, message: "Internal server error" });
 	}
 });
 
