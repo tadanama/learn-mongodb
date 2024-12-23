@@ -9,7 +9,7 @@ dotenv.config();
 
 // Instantiate express
 const app = express();
-const port = process.env.PORT;
+const port = process.env.PORT || 5000;
 
 // Parse json data to req.body
 app.use(express.json());
