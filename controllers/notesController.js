@@ -2,7 +2,7 @@ import Note from "../model/notes.model.js";
 import mongoose from "mongoose";
 
 export const getAllNotes = async (req, res) => {
-    try {
+	try {
 		const allNotes = await Note.find({}); // Returns an array of documents
 		res.status(200).json({ success: true, data: allNotes });
 	} catch (error) {
@@ -12,7 +12,7 @@ export const getAllNotes = async (req, res) => {
 };
 
 export const createNewNote = async (req, res) => {
-    // Get the new note data
+	// Get the new note data
 	const note = req.body;
 	// Destructure the new note data to check if it is empty
 	const { title, text } = note;
@@ -38,7 +38,7 @@ export const createNewNote = async (req, res) => {
 };
 
 export const updateNote = async (req, res) => {
-    // Get the id of the note we trying to update
+	// Get the id of the note we trying to update
 	const { id } = req.params;
 
 	// Data to updte the note
@@ -72,7 +72,7 @@ export const updateNote = async (req, res) => {
 };
 
 export const deleteNote = async (req, res) => {
-    // Get the note id
+	// Get the note id
 	const { id } = req.params;
 
 	// Check if the id is valid in database
@@ -84,10 +84,14 @@ export const deleteNote = async (req, res) => {
 	// Delete note from database
 	try {
 		const result = await Note.findByIdAndDelete(id); // returns the deleted note document
-		console.log("Result from query:", result);
+		console.log("Result from query delete:", result);
 		res
 			.status(200)
-			.json({ success: true, message: "Deleted note successfully" });
+			.json({
+				success: true,
+				message: "Deleted note successfully",
+				data: result,
+			});
 	} catch (error) {
 		console.log("Error deleting note:", error.message);
 		res.status(500).json({ success: false, message: "Internal server error" });
